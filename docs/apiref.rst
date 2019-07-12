@@ -1,5 +1,5 @@
 API Reference
 ==============
 
-.. automodule:: qwiic_joystick
+.. automodule:: qwiic_twist
    :members:

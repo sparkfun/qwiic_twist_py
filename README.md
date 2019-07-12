@@ -1,4 +1,4 @@
-Qwiic_Joystick_Py
+Qwiic_Twist_Py
 ==================
 
 <p align="center">

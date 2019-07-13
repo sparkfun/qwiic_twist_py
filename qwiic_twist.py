@@ -3,14 +3,14 @@
 #
 # Python library for the SparkFun qwiic twist.
 #
-#	https://www.sparkfun.com/products/15083
+#   https://www.sparkfun.com/products/15083
 #
 #------------------------------------------------------------------------
 #
 # Written by  SparkFun Electronics, July 2019
-# 
-# This python library supports the SparkFun Electroncis qwiic 
-# qwiic sensor/board ecosystem 
+#
+# This python library supports the SparkFun Electroncis qwiic
+# qwiic sensor/board ecosystem
 #
 # More information on qwiic is at https:// www.sparkfun.com/qwiic
 #
@@ -18,24 +18,30 @@
 #==================================================================================
 # Copyright (c) 2019 SparkFun Electronics
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy 
-# of this software and associated documentation files (the "Software"), to deal 
-# in the Software without restriction, including without limitation the rights 
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
-# copies of the Software, and to permit persons to whom the Software is 
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
 #
-# The above copyright notice and this permission notice shall be included in all 
+# The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 #==================================================================================
+#
+# This is mostly a port of existing Arduino functionaly, so pylint is sad.
+# The goal is to keep the public interface pthonic, but internal is internal
+#
+# pylint: disable=line-too-long, too-many-public-methods, invalid-name
+#
 
 """
 qwiic_twist
@@ -50,19 +56,20 @@ New to qwiic? Take a look at the entire [SparkFun qwiic ecosystem](https://www.s
 
 """
 #-----------------------------------------------------------------------------
+from __future__ import print_function
 
 import qwiic_i2c
 
-# Define the device name and I2C addresses. These are set in the class defintion 
+# Define the device name and I2C addresses. These are set in the class defintion
 # as class variables, making them avilable without having to create a class instance.
-# This allows higher level logic to rapidly create a index of qwiic devices at 
+# This allows higher level logic to rapidly create a index of qwiic devices at
 # runtine
 #
-# The name of this device 
+# The name of this device
 _DEFAULT_NAME = "SparkFun Qwiic Twist"
 
 # Some devices have multiple availabel addresses - this is a list of these addresses.
-# NOTE: The first address in this list is considered the default I2C address for the 
+# NOTE: The first address in this list is considered the default I2C address for the
 # device.
 _AVAILABLE_I2C_ADDRESS = [0x3F]
 
@@ -93,563 +100,562 @@ _enableInterruptButtonBit = 1
 _enableInterruptEncoderBit = 0
 
 # define the class that encapsulates the device being created. All information associated with this
-# device is encapsulated by this class. The device class should be the only value exported 
+# device is encapsulated by this class. The device class should be the only value exported
 # from this module.
 
 class QwiicTwist(object):
-	"""
-	QwiicTwist
-
-		:param address: The I2C address to use for the device. 
-						If not provided, the default address is used.
-		:param i2c_driver: An existing i2c driver object. If not provided 
-						a driver object is created. 
-		:return: The QwiicTwist device object.
-		:rtype: Object
-	"""
-	# Constructor
-	device_name			= _DEFAULT_NAME
-	available_addresses	= _AVAILABLE_I2C_ADDRESS
-
-	# Constructor
-	def __init__(self, address=None, i2c_driver=None):
-
-		# Did the user specify an I2C address?
-		self.address = address if address != None else self.available_addresses[0]
-
-		# load the I2C driver if one isn't provided
-
-		if i2c_driver == None:
-			self._i2c = qwiic_i2c.getI2CDriver()
-			if self._i2c == None:
-				print("Unable to load I2C driver for this platform.")
-				return
-		else:
-			self._i2c = i2c_driver
-
-	# ----------------------------------
-	# isConnected()
-	#
-	# Is an actual board connected to our system?
-
-	def is_connected(self):
-		""" 
-			Determine if a Tesit device is conntected to the system..
-
-			:return: True if the device is connected, otherwise False.
-			:rtype: bool
-
-		"""
-		return qwiic_i2c.isDeviceConnected(self.address)
-
-	connected = property(is_connected)
-	# ----------------------------------
-	# begin()
-	#
-	# Initialize the system/validate the board. 
-	def begin(self):
-		""" 
-			Initialize the operation of the Twist module
-
-			:return: Returns true of the initializtion was successful, otherwise False.
-			:rtype: bool
-
-		"""
-		
-		# Basically return True if we are connected...
-	
-		return self.is_connected()
-
-	#----------------------------------------------------------------
-	# clear_interrupts()
-	#
-	# Clears the moved, clicked, and pressed bits
-
-	def clear_interrupts(self):
-		""" 
-			Clears the moved, clicked, and pressed bits
-
-			:return: No return Value
-
-		"""
-		self._i2c.writeByte(self.address, TWIST_STATUS, 0)
+    """
+    QwiicTwist
+
+        :param address: The I2C address to use for the device.
+                        If not provided, the default address is used.
+        :param i2c_driver: An existing i2c driver object. If not provided
+                        a driver object is created.
+        :return: The QwiicTwist device object.
+        :rtype: Object
+    """
+    # Constructor
+    device_name = _DEFAULT_NAME
+    available_addresses = _AVAILABLE_I2C_ADDRESS
+
+    # Constructor
+    def __init__(self, address=None, i2c_driver=None):
 
-	#----------------------------------------------------------------
-	# get_count()
-	#
-	# Returns the number of indents the user has twisted the knob
+        # Did the user specify an I2C address?
+        self.address = address if address is not None else self.available_addresses[0]
 
-	def get_count(self):
-		""" 
-			Returns the number of indents the user has twisted the knob
+        # load the I2C driver if one isn't provided
 
-			:return: number of indents
-			:rtype: word as integer
+        if i2c_driver is None:
+            self._i2c = qwiic_i2c.getI2CDriver()
+            if self._i2c is None:
+                print("Unable to load I2C driver for this platform.")
+                return
+        else:
+            self._i2c = i2c_driver
 
-		"""
-		return self._i2c.readWord(self.address, TWIST_COUNT)
+    # ----------------------------------
+    # isConnected()
+    #
+    # Is an actual board connected to our system?
 
-	#----------------------------------------------------------------
-	# set_count()
-	#
-	# Set the encoder count to a specific amount
-	def set_count(self, amount):
-		""" 
-			Set the encoder count to a specific amount
+    def is_connected(self):
+        """
+            Determine if a Tesit device is conntected to the system..
 
-			:param amount: the value to set the counter to
-			:return: no return value
+            :return: True if the device is connected, otherwise False.
+            :rtype: bool
 
-		"""
+        """
+        return qwiic_i2c.isDeviceConnected(self.address)
 
-		return self._i2c.writeWord(self.address, TWIST_COUNT, amount)
+    connected = property(is_connected)
+    # ----------------------------------
+    # begin()
+    #
+    # Initialize the system/validate the board.
+    def begin(self):
+        """
+            Initialize the operation of the Twist module
 
-	count = property(get_count, set_count)
+            :return: Returns true of the initializtion was successful, otherwise False.
+            :rtype: bool
 
-	#----------------------------------------------------------------
-	# get_limit()
-	#
-	# Returns the limit of allowed counts before wrapping. 0 is disabled
+        """
 
-	def get_limit(self):
-		""" 
-			Returns the limit of allowed counts before wrapping. 0 is disabled
+        # Basically return True if we are connected...
 
-			:return: The limit
-			:rtype: integer
+        return self.is_connected()
 
-		"""
-		return self._i2c.readWord(self.address, TWIST_LIMIT)
+    #----------------------------------------------------------------
+    # clear_interrupts()
+    #
+    # Clears the moved, clicked, and pressed bits
 
-		
-	#----------------------------------------------------------------
-	# set_limit()
-	#
-	# Set the encoder count limit to a specific amount
-	def set_limit(self, amount):
-		""" 
-			Set the encoder count limit to a specific amount
+    def clear_interrupts(self):
+        """
+            Clears the moved, clicked, and pressed bits
 
-			:param amount: the value to set the limit to
-			:return: no return value
+            :return: No return Value
 
-		"""
-		return self._i2c.writeWord(self.address, TWIST_LIMIT, amount)
+        """
+        self._i2c.writeByte(self.address, TWIST_STATUS, 0)
 
-	limit = property(get_limit, set_limit)
+    #----------------------------------------------------------------
+    # get_count()
+    #
+    # Returns the number of indents the user has twisted the knob
 
-	#----------------------------------------------------------------
-	# get_diff()
-	#
-	# Returns the number of ticks since last check
+    def get_count(self):
+        """
+            Returns the number of indents the user has twisted the knob
 
-	def get_diff(self, clearValue=False):
-		""" 
-			Returns the number of ticks since last check
+            :return: number of indents
+            :rtype: word as integer
 
-			:param clearValue: Set to True to clear the current value. Default is False
+        """
+        return self._i2c.readWord(self.address, TWIST_COUNT)
 
-			:return: the difference
-			:rtype: integer
+    #----------------------------------------------------------------
+    # set_count()
+    #
+    # Set the encoder count to a specific amount
+    def set_count(self, amount):
+        """
+            Set the encoder count to a specific amount
 
-		"""
-		difference = self._i2c.readWord(self.address, TWIST_DIFFERENCE)
+            :param amount: the value to set the counter to
+            :return: no return value
 
-		if clearValue:
-			self._i2c.writeWord(self.address, TWIST_DIFFERENCE, 0)
+        """
 
-		return difference
+        return self._i2c.writeWord(self.address, TWIST_COUNT, amount)
 
-	#----------------------------------------------------------------
-	# is_pressed()
-	#
-	# Returns true if button is currently being pressed
+    count = property(get_count, set_count)
 
-	def is_pressed(self):
-		""" 
-			Returns true if button is currently being pressed
+    #----------------------------------------------------------------
+    # get_limit()
+    #
+    # Returns the limit of allowed counts before wrapping. 0 is disabled
 
-			:return: Button pressed state
-			:rtype: Boolean
+    def get_limit(self):
+        """
+            Returns the limit of allowed counts before wrapping. 0 is disabled
 
-		"""
-		status = self._i2c.readByte(self.address, TWIST_STATUS)
+            :return: The limit
+            :rtype: integer
 
-		self._i2c.writeByte(self.address, TWIST_STATUS, \
-						status & ~(1 << _statusButtonPressedBit))
+        """
+        return self._i2c.readWord(self.address, TWIST_LIMIT)
 
-		return (status & (1 << _statusButtonPressedBit)) != 0
 
-	pressed = property(is_pressed)
-	#----------------------------------------------------------------
-	# was_clicked()
-	#
-	# Returns true if a click event has occurred
+    #----------------------------------------------------------------
+    # set_limit()
+    #
+    # Set the encoder count limit to a specific amount
+    def set_limit(self, amount):
+        """
+            Set the encoder count limit to a specific amount
 
-	def was_clicked(self):
-		""" 
-			Returns true if a click event has occurred
+            :param amount: the value to set the limit to
+            :return: no return value
 
-			:return: Click event state
-			:rtype: Boolean
+        """
+        return self._i2c.writeWord(self.address, TWIST_LIMIT, amount)
 
-		"""
-		status = self._i2c.readByte(self.address, TWIST_STATUS)
+    limit = property(get_limit, set_limit)
 
-		self._i2c.writeByte(self.address, TWIST_STATUS, \
-						status & ~(1 << _statusButtonClickedBit))
-		
-		return (clickedstatus & (1 << _statusButtonClickedBit)) != 0
+    #----------------------------------------------------------------
+    # get_diff()
+    #
+    # Returns the number of ticks since last check
 
-	clicked = property(was_clicked)
-	#----------------------------------------------------------------
-	# has_moved()
-	#
-	# Returns true if knob has been twisted
+    def get_diff(self, clear_value=False):
+        """
+            Returns the number of ticks since last check
 
-	def has_moved(self):
-		""" 
-			Returns true if knob has been twisted
+            :param clearValue: Set to True to clear the current value. Default is False
 
-			:return: Moved state
-			:rtype: Boolean
+            :return: the difference
+            :rtype: integer
 
-		"""
-		status = self._i2c.readByte(self.address, TWIST_STATUS)
+        """
+        difference = self._i2c.readWord(self.address, TWIST_DIFFERENCE)
 
-		self._i2c.writeByte(self.address, TWIST_STATUS, \
-						status & ~(1 << _statusButtonMovedBit))
-		
-		return (clickedstatus & (1 << _statusButtonMovedBit)) != 0
+        if clear_value:
+            self._i2c.writeWord(self.address, TWIST_DIFFERENCE, 0)
 
-	moved = property(has_moved)
-	#----------------------------------------------------------------
-	# since_last_movement()
-	#
-	# Returns the number of milliseconds since the last encoder movement
-	# By default, clear the current value
-	def since_last_movement(self, clearValue=True):
-		""" 
-			Returns the number of milliseconds since the last encoder movement
-			By default, clear the current value
+        return difference
 
-			:param clearValue: Clear out the value? True by default
+    #----------------------------------------------------------------
+    # is_pressed()
+    #
+    # Returns true if button is currently being pressed
 
-			:return: time since last encoder movement
-			:rtype: integer
+    def is_pressed(self):
+        """
+            Returns true if button is currently being pressed
 
-		"""
-		timeElapsed = self._i2c.readWord(self.address, TWIST_LAST_ENCODER_EVENT)
+            :return: Button pressed state
+            :rtype: Boolean
 
-		# Clear the current value if requested
-		if clearValue:
-			self._i2c.writeWord(TWIST_LAST_ENCODER_EVENT, 0)
+        """
+        status = self._i2c.readByte(self.address, TWIST_STATUS)
 
-		return timeElapsed
+        self._i2c.writeByte(self.address, TWIST_STATUS, \
+                        status & ~(1 << _statusButtonPressedBit))
 
-	#----------------------------------------------------------------
-	# since_last_press()
-	#
-	# Returns the number of milliseconds since the last button event (press and release)
-	# By default, clear the current value
-	def since_last_press(self, clearValue=True):
-		""" 
-			Returns the number of milliseconds since the last button event (press and release)
-			By default, clear the current value
+        return (status & (1 << _statusButtonPressedBit)) != 0
 
-			:param clearValue: Clear out the value? False by default
+    pressed = property(is_pressed)
+    #----------------------------------------------------------------
+    # was_clicked()
+    #
+    # Returns true if a click event has occurred
 
-			:return: time since last button press
-			:rtype: integer
+    def was_clicked(self):
+        """
+            Returns true if a click event has occurred
 
-		"""
-		timeElapsed = self._i2c.readWord(self.address, TWIST_LAST_BUTTON_EVENT)
+            :return: Click event state
+            :rtype: Boolean
 
-		# Clear the current value if requested
-		if clearValue:
-			self._i2c.writeWord(TWIST_LAST_BUTTON_EVENT, 0)
+        """
+        status = self._i2c.readByte(self.address, TWIST_STATUS)
 
-		return timeElapsed
+        self._i2c.writeByte(self.address, TWIST_STATUS, \
+                        status & ~(1 << _statusButtonClickedBit))
 
-	#----------------------------------------------------------------
-	# set_color()
-	#
-	# Sets the color of the encoder LEDs
+        return (status & (1 << _statusButtonClickedBit)) != 0
 
-	def set_color(self, red, green, blue):
-		""" 
-			Sets the color of the encoder LEDs
+    clicked = property(was_clicked)
+    #----------------------------------------------------------------
+    # has_moved()
+    #
+    # Returns true if knob has been twisted
 
-			:param red: Red component
-			:param green: Green component
-			:param blue: Blue component						
+    def has_moved(self):
+        """
+            Returns true if knob has been twisted
 
-			:return: No return value
+            :return: Moved state
+            :rtype: Boolean
 
-		"""
-		self._i2c.writeBlock(self.address, TWIST_RED, [red, green, blue])
+        """
+        status = self._i2c.readByte(self.address, TWIST_STATUS)
 
-	#----------------------------------------------------------------
-	# set_red()
-	#
-	# Sets the red color component
+        self._i2c.writeByte(self.address, TWIST_STATUS, \
+                        status & ~(1 << _statusEncoderMovedBit))
 
-	def set_red(self, red):
-		""" 
-			Sets the red color of the encoder LEDs
+        return (status & (1 << _statusEncoderMovedBit)) != 0
 
-			:param red: Red component				
+    moved = property(has_moved)
+    #----------------------------------------------------------------
+    # since_last_movement()
+    #
+    # Returns the number of milliseconds since the last encoder movement
+    # By default, clear the current value
+    def since_last_movement(self, clear_value=True):
+        """
+            Returns the number of milliseconds since the last encoder movement
+            By default, clear the current value
 
-			:return: No return value
+            :param clearValue: Clear out the value? True by default
 
-		"""
-		self._i2c.writeByte(self.address, TWIST_RED, red)
+            :return: time since last encoder movement
+            :rtype: integer
 
-	#----------------------------------------------------------------
-	# get_red()
-	#
-	# Gets the red color component
+        """
+        time_elapsed = self._i2c.readWord(self.address, TWIST_LAST_ENCODER_EVENT)
 
-	def get_red(self):
-		""" 
-			Gets the red color of the encoder LEDs
+        # Clear the current value if requested
+        if clear_value:
+            self._i2c.writeWord(TWIST_LAST_ENCODER_EVENT, 0)
 
-			:return: Red component of the color
+        return time_elapsed
 
-		"""
-		return self._i2c.readByte(self.address, TWIST_RED)
+    #----------------------------------------------------------------
+    # since_last_press()
+    #
+    # Returns the number of milliseconds since the last button event (press and release)
+    # By default, clear the current value
+    def since_last_press(self, clear_value=True):
+        """
+            Returns the number of milliseconds since the last button event (press and release)
+            By default, clear the current value
 
-	red = property(get_red, set_red)
-	#----------------------------------------------------------------
-	# set_green()
-	#
-	# Sets the green color component
+            :param clearValue: Clear out the value? False by default
 
-	def set_green(self, green):
-		""" 
-			Sets the green color of the encoder LEDs
+            :return: time since last button press
+            :rtype: integer
 
-			:param green: Green component				
+        """
+        time_elapsed = self._i2c.readWord(self.address, TWIST_LAST_BUTTON_EVENT)
 
-			:return: No return value
-			:rtype: integer			
+        # Clear the current value if requested
+        if clear_value:
+            self._i2c.writeWord(TWIST_LAST_BUTTON_EVENT, 0)
 
-		"""
-		self._i2c.writeByte(self.address, TWIST_GREEN, green)
+        return time_elapsed
 
-	#----------------------------------------------------------------
-	# get_green()
-	#
-	# Gets the green color component
+    #----------------------------------------------------------------
+    # set_color()
+    #
+    # Sets the color of the encoder LEDs
 
-	def get_green(self):
-		""" 
-			Gets the green color of the encoder LEDs
+    def set_color(self, red, green, blue):
+        """
+            Sets the color of the encoder LEDs
 
-			:return: green component of the color
-			:rtype: integer			
+            :param red: Red component
+            :param green: Green component
+            :param blue: Blue component
 
-		"""
-		return self._i2c.readByte(self.address, TWIST_GREEN)
+            :return: No return value
 
-	green = property(get_green, set_green)
+        """
+        self._i2c.writeBlock(self.address, TWIST_RED, [red, green, blue])
 
-	#----------------------------------------------------------------
-	# set_blue()
-	#
-	# Sets the blue color component
+    #----------------------------------------------------------------
+    # set_red()
+    #
+    # Sets the red color component
 
-	def set_blue(self, blue):
-		""" 
-			Sets the blue color of the encoder LEDs
+    def set_red(self, red):
+        """
+            Sets the red color of the encoder LEDs
 
-			:param blue: blue component				
+            :param red: Red component
 
-			:return: No return value
+            :return: No return value
 
-		"""
-		self._i2c.writeByte(self.address, TWIST_BLUE, blue)
+        """
+        self._i2c.writeByte(self.address, TWIST_RED, red)
 
-	#----------------------------------------------------------------
-	# get_blue()
-	#
-	# Gets the blue color component
+    #----------------------------------------------------------------
+    # get_red()
+    #
+    # Gets the red color component
 
-	def get_blue(self):
-		""" 
-			Gets the blue color of the encoder LEDs
+    def get_red(self):
+        """
+            Gets the red color of the encoder LEDs
 
-			:return: blue component of the color
-			:rtype: integer			
+            :return: Red component of the color
 
-		"""
-		return self._i2c.readByte(self.address, TWIST_BLUE)
+        """
+        return self._i2c.readByte(self.address, TWIST_RED)
 
-	blue = property(get_blue, set_blue)
+    red = property(get_red, set_red)
+    #----------------------------------------------------------------
+    # set_green()
+    #
+    # Sets the green color component
 
-	#----------------------------------------------------------------
-	# get_version()
-	# 
-	# Returns a int of the firmware version number
+    def set_green(self, green):
+        """
+            Sets the green color of the encoder LEDs
 
-	def get_version(self):
-		"""
-		Returns a integer of the firmware version number
+            :param green: Green component
 
-		:return: The firmware version
-		:rtype: integer
-		"""
-		return self._i2c.readWord(self.address, TWIST_VERSION)
+            :return: No return value
+            :rtype: integer
 
-	version = property(get_version)
-	#----------------------------------------------------------------
-	# connect_color()
-	#
-	# Sets the relation between each color and the twisting of the knob
-	# Connect the LED so it changes [amount] with each encoder tick
-	# Negative numbers are allowed (so LED gets brighter the more you turn the encoder down)
+        """
+        self._i2c.writeByte(self.address, TWIST_GREEN, green)
 
-	def connect_color(self, red, green, blue):
-		""" 
-			Sets the relation between each color and the twisting of the knob
-			Connect the LED so it changes [amount] with each encoder tick
-			Negative numbers are allowed (so LED gets brighter the more you turn the encoder down)
+    #----------------------------------------------------------------
+    # get_green()
+    #
+    # Gets the green color component
 
-			:param red: Red component
-			:param green: Green component
-			:param blue: Blue component						
+    def get_green(self):
+        """
+            Gets the green color of the encoder LEDs
 
-			:return: No return value
+            :return: green component of the color
+            :rtype: integer
 
-		"""
-		value = [red >> 8, red & 0xFF, green >> 8, green & 0xFF, blue >>8, blue & 0xFF]
-		self._i2c.writeBlock(self.address, TWIST_CONNECT_RED, [red, green, blue])
+        """
+        return self._i2c.readByte(self.address, TWIST_GREEN)
 
-	#----------------------------------------------------------------
-	# set_connect_red()
-	#
-	# Sets the connect red color component
+    green = property(get_green, set_green)
 
-	def set_connect_red(self, red):
-		""" 
-			Sets the connect red color of the encoder LEDs
+    #----------------------------------------------------------------
+    # set_blue()
+    #
+    # Sets the blue color component
 
-			:param red: Red component				
+    def set_blue(self, blue):
+        """
+            Sets the blue color of the encoder LEDs
 
-			:return: No return value
+            :param blue: blue component
 
-		"""
-		self._i2c.writeWord(self.address, TWIST_CONNECT_RED, red)
+            :return: No return value
 
-	#----------------------------------------------------------------
-	# get_connect_red()
-	#
-	# Gets the red color component
+        """
+        self._i2c.writeByte(self.address, TWIST_BLUE, blue)
 
-	def get_connect_red(self):
-		""" 
-			Gets the connect red color of the encoder LEDs
+    #----------------------------------------------------------------
+    # get_blue()
+    #
+    # Gets the blue color component
 
-			:return: Red component of the color
+    def get_blue(self):
+        """
+            Gets the blue color of the encoder LEDs
 
-		"""
-		return self._i2c.readWord(self.address, TWIST_CONNECT_RED)
+            :return: blue component of the color
+            :rtype: integer
 
-	connect_red = property(get_connect_red, set_connect_red)
-	
-	#----------------------------------------------------------------
-	# set_connect_green()
-	#
-	# Sets the connect green color component
+        """
+        return self._i2c.readByte(self.address, TWIST_BLUE)
 
-	def set_connect_green(self, green):
-		""" 
-			Sets the connect green color of the encoder LEDs
+    blue = property(get_blue, set_blue)
 
-			:param green: Green component				
+    #----------------------------------------------------------------
+    # get_version()
+    #
+    # Returns a int of the firmware version number
 
-			:return: No return value
+    def get_version(self):
+        """
+        Returns a integer of the firmware version number
 
-		"""
-		self._i2c.writeWord(self.address, TWIST_CONNECT_GREEN, green)
+        :return: The firmware version
+        :rtype: integer
+        """
+        return self._i2c.readWord(self.address, TWIST_VERSION)
 
-	#----------------------------------------------------------------
-	# get_connect_green()
-	#
-	# Gets the green color component
+    version = property(get_version)
+    #----------------------------------------------------------------
+    # connect_color()
+    #
+    # Sets the relation between each color and the twisting of the knob
+    # Connect the LED so it changes [amount] with each encoder tick
+    # Negative numbers are allowed (so LED gets brighter the more you turn the encoder down)
 
-	def get_connect_green(self):
-		""" 
-			Gets the connect green color of the encoder LEDs
+    def connect_color(self, red, green, blue):
+        """
+            Sets the relation between each color and the twisting of the knob
+            Connect the LED so it changes [amount] with each encoder tick
+            Negative numbers are allowed (so LED gets brighter the more you turn the encoder down)
 
-			:return: green component of the color
+            :param red: Red component
+            :param green: Green component
+            :param blue: Blue component
 
-		"""
-		return self._i2c.readWord(self.address, TWIST_CONNECT_GREEN)
+            :return: No return value
 
-	connect_green = property(get_connect_green, set_connect_green)
+        """
+        self._i2c.writeBlock(self.address, TWIST_CONNECT_RED, [red, green, blue])
 
-	#----------------------------------------------------------------
-	# set_connect_blue()
-	#
-	# Sets the connect blue color component
+    #----------------------------------------------------------------
+    # set_connect_red()
+    #
+    # Sets the connect red color component
 
-	def set_connect_blue(self, blue):
-		""" 
-			Sets the connect blue color of the encoder LEDs
+    def set_connect_red(self, red):
+        """
+            Sets the connect red color of the encoder LEDs
 
-			:param blue: blue component				
+            :param red: Red component
 
-			:return: No return value
+            :return: No return value
 
-		"""
-		self._i2c.writeWord(self.address, TWIST_CONNECT_BLUE, blue)
+        """
+        self._i2c.writeWord(self.address, TWIST_CONNECT_RED, red)
 
-	#----------------------------------------------------------------
-	# get_connect_blue()
-	#
-	# Gets the blue color component
+    #----------------------------------------------------------------
+    # get_connect_red()
+    #
+    # Gets the red color component
 
-	def get_connect_blue(self):
-		""" 
-			Gets the connect blue color of the encoder LEDs
+    def get_connect_red(self):
+        """
+            Gets the connect red color of the encoder LEDs
 
-			:return: Blue component of the color
+            :return: Red component of the color
 
-		"""
-		return self._i2c.readWord(self.address, TWIST_CONNECT_BLUE)
+        """
+        return self._i2c.readWord(self.address, TWIST_CONNECT_RED)
 
-	connect_blue = property(get_connect_blue, set_connect_blue)
+    connect_red = property(get_connect_red, set_connect_red)
 
-	#----------------------------------------------------------------
-	# set_int_timeout()
-	#
-	# Set number of milliseconds that elapse between end of knob turning and interrupt firing
+    #----------------------------------------------------------------
+    # set_connect_green()
+    #
+    # Sets the connect green color component
 
-	def set_int_timeout(self, timeout):
-		""" 
-			Set number of milliseconds that elapse between end of knob turning and interrupt firing
+    def set_connect_green(self, green):
+        """
+            Sets the connect green color of the encoder LEDs
 
-			:param timeout: the timeout value in milliseconds		
+            :param green: Green component
 
-			:return: No return value
+            :return: No return value
 
-		"""
-		self._i2c.writeWord(self.address, TWIST_TURN_INT_TIMEOUT, timeout)
+        """
+        self._i2c.writeWord(self.address, TWIST_CONNECT_GREEN, green)
 
-	#----------------------------------------------------------------
-	# get_int_timeout()
-	#
-	# Get number of milliseconds that elapse between end of knob turning and interrupt firing
+    #----------------------------------------------------------------
+    # get_connect_green()
+    #
+    # Gets the green color component
 
-	def get_int_timeout(self):
-		""" 
-			Get number of milliseconds that elapse between end of knob turning and interrupt firing
+    def get_connect_green(self):
+        """
+            Gets the connect green color of the encoder LEDs
 
-			:return: the timeout value
-			:rtype: integer
+            :return: green component of the color
 
-		"""
-		return self._i2c.readWord(self.address, TWIST_TURN_INT_TIMEOUT)
+        """
+        return self._i2c.readWord(self.address, TWIST_CONNECT_GREEN)
 
-	int_timeout = property(get_int_timeout, set_int_timeout)
+    connect_green = property(get_connect_green, set_connect_green)
+
+    #----------------------------------------------------------------
+    # set_connect_blue()
+    #
+    # Sets the connect blue color component
+
+    def set_connect_blue(self, blue):
+        """
+            Sets the connect blue color of the encoder LEDs
+
+            :param blue: blue component
+
+            :return: No return value
+
+        """
+        self._i2c.writeWord(self.address, TWIST_CONNECT_BLUE, blue)
+
+    #----------------------------------------------------------------
+    # get_connect_blue()
+    #
+    # Gets the blue color component
+
+    def get_connect_blue(self):
+        """
+            Gets the connect blue color of the encoder LEDs
+
+            :return: Blue component of the color
+
+        """
+        return self._i2c.readWord(self.address, TWIST_CONNECT_BLUE)
+
+    connect_blue = property(get_connect_blue, set_connect_blue)
+
+    #----------------------------------------------------------------
+    # set_int_timeout()
+    #
+    # Set number of milliseconds that elapse between end of knob turning and interrupt firing
+
+    def set_int_timeout(self, timeout):
+        """
+            Set number of milliseconds that elapse between end of knob turning and interrupt firing
+
+            :param timeout: the timeout value in milliseconds
+
+            :return: No return value
+
+        """
+        self._i2c.writeWord(self.address, TWIST_TURN_INT_TIMEOUT, timeout)
+
+    #----------------------------------------------------------------
+    # get_int_timeout()
+    #
+    # Get number of milliseconds that elapse between end of knob turning and interrupt firing
+
+    def get_int_timeout(self):
+        """
+            Get number of milliseconds that elapse between end of knob turning and interrupt firing
+
+            :return: the timeout value
+            :rtype: integer
+
+        """
+        return self._i2c.readWord(self.address, TWIST_TURN_INT_TIMEOUT)
+
+    int_timeout = property(get_int_timeout, set_int_timeout)

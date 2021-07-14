@@ -43,6 +43,7 @@ from __future__ import print_function
 import qwiic_twist
 import time
 import random
+import sys
 
 def runExample():
 

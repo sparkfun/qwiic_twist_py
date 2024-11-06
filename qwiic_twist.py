@@ -56,7 +56,6 @@ New to qwiic? Take a look at the entire [SparkFun qwiic ecosystem](https://www.s
 
 """
 #-----------------------------------------------------------------------------
-from __future__ import print_function
 
 import qwiic_i2c
 
@@ -394,7 +393,7 @@ class QwiicTwist(object):
             :return: No return value
 
         """
-        self._i2c.writeBlock(self.address, TWIST_RED, [red, green, blue])
+        self._i2c.writeBlock(self.address, TWIST_RED, [int(red), int(green), int(blue)])
 
     #----------------------------------------------------------------
     # set_red()

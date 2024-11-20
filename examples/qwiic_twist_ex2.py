@@ -39,7 +39,6 @@
 # Example 2
 #
 
-from __future__ import print_function
 import qwiic_twist
 import time
 import random
@@ -63,7 +62,7 @@ def runExample():
 			"YES" if myTwist.pressed else "NO", \
 			))
 
-		myTwist.set_color( random.randint(0,256), random.randint(0,256),random.randint(0,256))
+		myTwist.set_color( random.randint(0,255), random.randint(0,255),random.randint(0,255))
 
 		time.sleep(.3)
 

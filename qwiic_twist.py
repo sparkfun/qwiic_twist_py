@@ -56,7 +56,6 @@ New to qwiic? Take a look at the entire [SparkFun qwiic ecosystem](https://www.s
 
 """
 #-----------------------------------------------------------------------------
-from __future__ import print_function
 
 import qwiic_i2c
 
@@ -209,7 +208,7 @@ class QwiicTwist(object):
 
         """
 
-        return self._i2c.writeWord(self.address, TWIST_COUNT, amount)
+        return self._i2c.writeWord(self.address, TWIST_COUNT, int(amount))
 
     count = property(get_count, set_count)
 
@@ -241,7 +240,7 @@ class QwiicTwist(object):
             :return: no return value
 
         """
-        return self._i2c.writeWord(self.address, TWIST_LIMIT, amount)
+        return self._i2c.writeWord(self.address, TWIST_LIMIT, int(amount))
 
     limit = property(get_limit, set_limit)
 
@@ -394,7 +393,7 @@ class QwiicTwist(object):
             :return: No return value
 
         """
-        self._i2c.writeBlock(self.address, TWIST_RED, [red, green, blue])
+        self._i2c.writeBlock(self.address, TWIST_RED, [int(red), int(green), int(blue)])
 
     #----------------------------------------------------------------
     # set_red()
@@ -410,7 +409,7 @@ class QwiicTwist(object):
             :return: No return value
 
         """
-        self._i2c.writeByte(self.address, TWIST_RED, red)
+        self._i2c.writeByte(self.address, TWIST_RED, int(red))
 
     #----------------------------------------------------------------
     # get_red()
@@ -442,7 +441,7 @@ class QwiicTwist(object):
             :rtype: integer
 
         """
-        self._i2c.writeByte(self.address, TWIST_GREEN, green)
+        self._i2c.writeByte(self.address, TWIST_GREEN, int(green))
 
     #----------------------------------------------------------------
     # get_green()
@@ -475,7 +474,7 @@ class QwiicTwist(object):
             :return: No return value
 
         """
-        self._i2c.writeByte(self.address, TWIST_BLUE, blue)
+        self._i2c.writeByte(self.address, TWIST_BLUE, int(blue))
 
     #----------------------------------------------------------------
     # get_blue()
@@ -529,7 +528,7 @@ class QwiicTwist(object):
             :return: No return value
 
         """
-        self._i2c.writeBlock(self.address, TWIST_CONNECT_RED, [red, green, blue])
+        self._i2c.writeBlock(self.address, TWIST_CONNECT_RED, [int(red), int(green), int(blue)])
 
     #----------------------------------------------------------------
     # set_connect_red()
@@ -545,7 +544,7 @@ class QwiicTwist(object):
             :return: No return value
 
         """
-        self._i2c.writeWord(self.address, TWIST_CONNECT_RED, red)
+        self._i2c.writeWord(self.address, TWIST_CONNECT_RED, int(red))
 
     #----------------------------------------------------------------
     # get_connect_red()
@@ -577,7 +576,7 @@ class QwiicTwist(object):
             :return: No return value
 
         """
-        self._i2c.writeWord(self.address, TWIST_CONNECT_GREEN, green)
+        self._i2c.writeWord(self.address, TWIST_CONNECT_GREEN, int(green))
 
     #----------------------------------------------------------------
     # get_connect_green()
@@ -609,7 +608,7 @@ class QwiicTwist(object):
             :return: No return value
 
         """
-        self._i2c.writeWord(self.address, TWIST_CONNECT_BLUE, blue)
+        self._i2c.writeWord(self.address, TWIST_CONNECT_BLUE, int(blue))
 
     #----------------------------------------------------------------
     # get_connect_blue()
@@ -641,7 +640,7 @@ class QwiicTwist(object):
             :return: No return value
 
         """
-        self._i2c.writeWord(self.address, TWIST_TURN_INT_TIMEOUT, timeout)
+        self._i2c.writeWord(self.address, TWIST_TURN_INT_TIMEOUT, int(timeout))
 
     #----------------------------------------------------------------
     # get_int_timeout()

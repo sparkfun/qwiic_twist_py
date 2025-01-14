@@ -43,7 +43,7 @@
 # pylint: disable=line-too-long, too-many-public-methods, invalid-name
 #
 
-"""
+"""!
 qwiic_twist
 ===============
 Python module for the[SparkFun Qwiic Twist](https://www.sparkfun.com/products/15083)
@@ -53,7 +53,6 @@ This python package is a port of the existing [SparkFun Qwiic Twist Arduino Libr
 This package can be used in conjunction with the overall [SparkFun qwiic Python Package](https://github.com/sparkfun/Qwiic_Py)
 
 New to qwiic? Take a look at the entire [SparkFun qwiic ecosystem](https://www.sparkfun.com/qwiic).
-
 """
 #-----------------------------------------------------------------------------
 
@@ -103,15 +102,15 @@ _enableInterruptEncoderBit = 0
 # from this module.
 
 class QwiicTwist(object):
-    """
+    """!
     QwiicTwist
 
-        :param address: The I2C address to use for the device.
+    @param address: The I2C address to use for the device.
                         If not provided, the default address is used.
-        :param i2c_driver: An existing i2c driver object. If not provided
+    @param i2c_driver: An existing i2c driver object. If not provided
                         a driver object is created.
-        :return: The QwiicTwist device object.
-        :rtype: Object
+
+    @return The Twist device object.
     """
     # Constructor
     device_name = _DEFAULT_NAME
@@ -139,12 +138,10 @@ class QwiicTwist(object):
     # Is an actual board connected to our system?
 
     def is_connected(self):
-        """
-            Determine if a Tesit device is conntected to the system..
+        """!
+        Determine if a Tesit device is conntected to the system..
 
-            :return: True if the device is connected, otherwise False.
-            :rtype: bool
-
+        @return **bool** True if the device is connected, otherwise False.
         """
         return qwiic_i2c.isDeviceConnected(self.address)
 
@@ -154,12 +151,10 @@ class QwiicTwist(object):
     #
     # Initialize the system/validate the board.
     def begin(self):
-        """
-            Initialize the operation of the Twist module
+        """!
+        Initialize the operation of the Twist module
 
-            :return: Returns true of the initializtion was successful, otherwise False.
-            :rtype: bool
-
+        @return **bool** Returns true of the initializtion was successful, otherwise False.
         """
 
         # Basically return True if we are connected...
@@ -172,11 +167,10 @@ class QwiicTwist(object):
     # Clears the moved, clicked, and pressed bits
 
     def clear_interrupts(self):
-        """
-            Clears the moved, clicked, and pressed bits
+        """!
+        Clears the moved, clicked, and pressed bits
 
-            :return: No return Value
-
+        @return No return Value
         """
         self._i2c.writeByte(self.address, TWIST_STATUS, 0)
 
@@ -186,12 +180,10 @@ class QwiicTwist(object):
     # Returns the number of indents the user has twisted the knob
 
     def get_count(self):
-        """
-            Returns the number of indents the user has twisted the knob
+        """!
+        Returns the number of indents the user has twisted the knob
 
-            :return: number of indents
-            :rtype: word as integer
-
+        @return **word as integer** number of indents
         """
         return self._i2c.readWord(self.address, TWIST_COUNT)
 
@@ -200,12 +192,12 @@ class QwiicTwist(object):
     #
     # Set the encoder count to a specific amount
     def set_count(self, amount):
-        """
-            Set the encoder count to a specific amount
+        """!
+        Set the encoder count to a specific amount
 
-            :param amount: the value to set the counter to
-            :return: no return value
+        @param amount: the value to set the counter to
 
+        @return no return value
         """
 
         return self._i2c.writeWord(self.address, TWIST_COUNT, int(amount))
@@ -218,12 +210,10 @@ class QwiicTwist(object):
     # Returns the limit of allowed counts before wrapping. 0 is disabled
 
     def get_limit(self):
-        """
-            Returns the limit of allowed counts before wrapping. 0 is disabled
+        """!
+        Returns the limit of allowed counts before wrapping. 0 is disabled
 
-            :return: The limit
-            :rtype: integer
-
+        @return **integer** The limit
         """
         return self._i2c.readWord(self.address, TWIST_LIMIT)
 
@@ -233,12 +223,12 @@ class QwiicTwist(object):
     #
     # Set the encoder count limit to a specific amount
     def set_limit(self, amount):
-        """
-            Set the encoder count limit to a specific amount
+        """!
+        Set the encoder count limit to a specific amount
 
-            :param amount: the value to set the limit to
-            :return: no return value
+        @param amount: the value to set the limit to
 
+        @return no return value
         """
         return self._i2c.writeWord(self.address, TWIST_LIMIT, int(amount))
 
@@ -250,14 +240,12 @@ class QwiicTwist(object):
     # Returns the number of ticks since last check
 
     def get_diff(self, clear_value=False):
-        """
-            Returns the number of ticks since last check
+        """!
+        Returns the number of ticks since last check
 
-            :param clearValue: Set to True to clear the current value. Default is False
+        @param clearValue: Set to True to clear the current value. Default is False
 
-            :return: the difference
-            :rtype: integer
-
+        @return **integer** the difference
         """
         difference = self._i2c.readWord(self.address, TWIST_DIFFERENCE)
 
@@ -272,12 +260,10 @@ class QwiicTwist(object):
     # Returns true if button is currently being pressed
 
     def is_pressed(self):
-        """
-            Returns true if button is currently being pressed
+        """!
+        Returns true if button is currently being pressed
 
-            :return: Button pressed state
-            :rtype: Boolean
-
+        @return **Boolean** Button pressed state
         """
         status = self._i2c.readByte(self.address, TWIST_STATUS)
 
@@ -293,12 +279,10 @@ class QwiicTwist(object):
     # Returns true if a click event has occurred
 
     def was_clicked(self):
-        """
-            Returns true if a click event has occurred
+        """!
+        Returns true if a click event has occurred
 
-            :return: Click event state
-            :rtype: Boolean
-
+        @return **Boolean** Click event state
         """
         status = self._i2c.readByte(self.address, TWIST_STATUS)
 
@@ -314,12 +298,10 @@ class QwiicTwist(object):
     # Returns true if knob has been twisted
 
     def has_moved(self):
-        """
-            Returns true if knob has been twisted
+        """!
+        Returns true if knob has been twisted
 
-            :return: Moved state
-            :rtype: Boolean
-
+        @return **Boolean** Moved state
         """
         status = self._i2c.readByte(self.address, TWIST_STATUS)
 
@@ -335,15 +317,13 @@ class QwiicTwist(object):
     # Returns the number of milliseconds since the last encoder movement
     # By default, clear the current value
     def since_last_movement(self, clear_value=True):
-        """
-            Returns the number of milliseconds since the last encoder movement
+        """!
+        Returns the number of milliseconds since the last encoder movement
             By default, clear the current value
 
-            :param clearValue: Clear out the value? True by default
+        @param clearValue: Clear out the value? True by default
 
-            :return: time since last encoder movement
-            :rtype: integer
-
+        @return **integer** time since last encoder movement
         """
         time_elapsed = self._i2c.readWord(self.address, TWIST_LAST_ENCODER_EVENT)
 
@@ -359,15 +339,13 @@ class QwiicTwist(object):
     # Returns the number of milliseconds since the last button event (press and release)
     # By default, clear the current value
     def since_last_press(self, clear_value=True):
-        """
-            Returns the number of milliseconds since the last button event (press and release)
+        """!
+        Returns the number of milliseconds since the last button event (press and release)
             By default, clear the current value
 
-            :param clearValue: Clear out the value? False by default
+        @param clearValue: Clear out the value? False by default
 
-            :return: time since last button press
-            :rtype: integer
-
+        @return **integer** time since last button press
         """
         time_elapsed = self._i2c.readWord(self.address, TWIST_LAST_BUTTON_EVENT)
 
@@ -383,15 +361,14 @@ class QwiicTwist(object):
     # Sets the color of the encoder LEDs
 
     def set_color(self, red, green, blue):
-        """
-            Sets the color of the encoder LEDs
+        """!
+        Sets the color of the encoder LEDs
 
-            :param red: Red component
-            :param green: Green component
-            :param blue: Blue component
+        @param red: Red component
+        @param green: Green component
+        @param blue: Blue component
 
-            :return: No return value
-
+        @return No return value
         """
         self._i2c.writeBlock(self.address, TWIST_RED, [int(red), int(green), int(blue)])
 
@@ -401,13 +378,12 @@ class QwiicTwist(object):
     # Sets the red color component
 
     def set_red(self, red):
-        """
-            Sets the red color of the encoder LEDs
+        """!
+        Sets the red color of the encoder LEDs
 
-            :param red: Red component
+        @param red: Red component
 
-            :return: No return value
-
+        @return No return value
         """
         self._i2c.writeByte(self.address, TWIST_RED, int(red))
 
@@ -417,11 +393,10 @@ class QwiicTwist(object):
     # Gets the red color component
 
     def get_red(self):
-        """
-            Gets the red color of the encoder LEDs
+        """!
+        Gets the red color of the encoder LEDs
 
-            :return: Red component of the color
-
+        @return Red component of the color
         """
         return self._i2c.readByte(self.address, TWIST_RED)
 
@@ -432,14 +407,12 @@ class QwiicTwist(object):
     # Sets the green color component
 
     def set_green(self, green):
-        """
-            Sets the green color of the encoder LEDs
+        """!
+        Sets the green color of the encoder LEDs
 
-            :param green: Green component
+        @param green: Green component
 
-            :return: No return value
-            :rtype: integer
-
+        @return **integer** No return value
         """
         self._i2c.writeByte(self.address, TWIST_GREEN, int(green))
 
@@ -449,12 +422,10 @@ class QwiicTwist(object):
     # Gets the green color component
 
     def get_green(self):
-        """
-            Gets the green color of the encoder LEDs
+        """!
+        Gets the green color of the encoder LEDs
 
-            :return: green component of the color
-            :rtype: integer
-
+        @return **integer** green component of the color
         """
         return self._i2c.readByte(self.address, TWIST_GREEN)
 
@@ -466,13 +437,12 @@ class QwiicTwist(object):
     # Sets the blue color component
 
     def set_blue(self, blue):
-        """
-            Sets the blue color of the encoder LEDs
+        """!
+        Sets the blue color of the encoder LEDs
 
-            :param blue: blue component
+        @param blue: blue component
 
-            :return: No return value
-
+        @return No return value
         """
         self._i2c.writeByte(self.address, TWIST_BLUE, int(blue))
 
@@ -482,12 +452,10 @@ class QwiicTwist(object):
     # Gets the blue color component
 
     def get_blue(self):
-        """
-            Gets the blue color of the encoder LEDs
+        """!
+        Gets the blue color of the encoder LEDs
 
-            :return: blue component of the color
-            :rtype: integer
-
+        @return **integer** blue component of the color
         """
         return self._i2c.readByte(self.address, TWIST_BLUE)
 
@@ -499,11 +467,10 @@ class QwiicTwist(object):
     # Returns a int of the firmware version number
 
     def get_version(self):
-        """
+        """!
         Returns a integer of the firmware version number
 
-        :return: The firmware version
-        :rtype: integer
+        @return **integer** The firmware version
         """
         return self._i2c.readWord(self.address, TWIST_VERSION)
 
@@ -516,17 +483,16 @@ class QwiicTwist(object):
     # Negative numbers are allowed (so LED gets brighter the more you turn the encoder down)
 
     def connect_color(self, red, green, blue):
-        """
-            Sets the relation between each color and the twisting of the knob
+        """!
+        Sets the relation between each color and the twisting of the knob
             Connect the LED so it changes [amount] with each encoder tick
             Negative numbers are allowed (so LED gets brighter the more you turn the encoder down)
 
-            :param red: Red component
-            :param green: Green component
-            :param blue: Blue component
+        @param red: Red component
+        @param green: Green component
+        @param blue: Blue component
 
-            :return: No return value
-
+        @return No return value
         """
         self._i2c.writeBlock(self.address, TWIST_CONNECT_RED, [int(red), int(green), int(blue)])
 
@@ -536,13 +502,12 @@ class QwiicTwist(object):
     # Sets the connect red color component
 
     def set_connect_red(self, red):
-        """
-            Sets the connect red color of the encoder LEDs
+        """!
+        Sets the connect red color of the encoder LEDs
 
-            :param red: Red component
+        @param red: Red component
 
-            :return: No return value
-
+        @return No return value
         """
         self._i2c.writeWord(self.address, TWIST_CONNECT_RED, int(red))
 
@@ -552,11 +517,10 @@ class QwiicTwist(object):
     # Gets the red color component
 
     def get_connect_red(self):
-        """
-            Gets the connect red color of the encoder LEDs
+        """!
+        Gets the connect red color of the encoder LEDs
 
-            :return: Red component of the color
-
+        @return Red component of the color
         """
         return self._i2c.readWord(self.address, TWIST_CONNECT_RED)
 
@@ -568,13 +532,12 @@ class QwiicTwist(object):
     # Sets the connect green color component
 
     def set_connect_green(self, green):
-        """
-            Sets the connect green color of the encoder LEDs
+        """!
+        Sets the connect green color of the encoder LEDs
 
-            :param green: Green component
+        @param green: Green component
 
-            :return: No return value
-
+        @return No return value
         """
         self._i2c.writeWord(self.address, TWIST_CONNECT_GREEN, int(green))
 
@@ -584,11 +547,10 @@ class QwiicTwist(object):
     # Gets the green color component
 
     def get_connect_green(self):
-        """
-            Gets the connect green color of the encoder LEDs
+        """!
+        Gets the connect green color of the encoder LEDs
 
-            :return: green component of the color
-
+        @return green component of the color
         """
         return self._i2c.readWord(self.address, TWIST_CONNECT_GREEN)
 
@@ -600,13 +562,12 @@ class QwiicTwist(object):
     # Sets the connect blue color component
 
     def set_connect_blue(self, blue):
-        """
-            Sets the connect blue color of the encoder LEDs
+        """!
+        Sets the connect blue color of the encoder LEDs
 
-            :param blue: blue component
+        @param blue: blue component
 
-            :return: No return value
-
+        @return No return value
         """
         self._i2c.writeWord(self.address, TWIST_CONNECT_BLUE, int(blue))
 
@@ -616,11 +577,10 @@ class QwiicTwist(object):
     # Gets the blue color component
 
     def get_connect_blue(self):
-        """
-            Gets the connect blue color of the encoder LEDs
+        """!
+        Gets the connect blue color of the encoder LEDs
 
-            :return: Blue component of the color
-
+        @return Blue component of the color
         """
         return self._i2c.readWord(self.address, TWIST_CONNECT_BLUE)
 
@@ -632,13 +592,12 @@ class QwiicTwist(object):
     # Set number of milliseconds that elapse between end of knob turning and interrupt firing
 
     def set_int_timeout(self, timeout):
-        """
-            Set number of milliseconds that elapse between end of knob turning and interrupt firing
+        """!
+        Set number of milliseconds that elapse between end of knob turning and interrupt firing
 
-            :param timeout: the timeout value in milliseconds
+        @param timeout: the timeout value in milliseconds
 
-            :return: No return value
-
+        @return No return value
         """
         self._i2c.writeWord(self.address, TWIST_TURN_INT_TIMEOUT, int(timeout))
 
@@ -648,12 +607,10 @@ class QwiicTwist(object):
     # Get number of milliseconds that elapse between end of knob turning and interrupt firing
 
     def get_int_timeout(self):
-        """
-            Get number of milliseconds that elapse between end of knob turning and interrupt firing
+        """!
+        Get number of milliseconds that elapse between end of knob turning and interrupt firing
 
-            :return: the timeout value
-            :rtype: integer
-
+        @return **integer** the timeout value
         """
         return self._i2c.readWord(self.address, TWIST_TURN_INT_TIMEOUT)
 

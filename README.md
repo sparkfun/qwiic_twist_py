@@ -1,6 +1,6 @@
 ![Qwiic TWIST - Python Package](docs/images/gh-banner.png "qwiic TWIST Python Package")
 
-# SparkFun Qwiic TWIST - Python Package
+# SparkFun Qwiic Twist - Python Package
 
 ![PyPi Version](https://img.shields.io/pypi/v/sparkfun_qwiic_twist)
 ![GitHub issues](https://img.shields.io/github/issues/sparkfun/qwiic_twist_py)
@@ -31,7 +31,7 @@ New to qwiic? Take a look at the entire [SparkFun qwiic ecosystem](https://www.s
 
 This Python package supports the following SparkFun qwiic products on Python, MicroPython and Circuit python. 
 
-* [SparkFun Twist RGB Rotary Encoder Sensor - TWIST](https://www.sparkfun.com/products/15083)
+* [SparkFun Twist RGB Rotary Encoder](https://www.sparkfun.com/products/15083)
 
 ### Supported Platforms
 

@@ -329,7 +329,7 @@ class QwiicTwist(object):
 
         # Clear the current value if requested
         if clear_value:
-            self._i2c.writeWord(TWIST_LAST_ENCODER_EVENT, 0)
+            self._i2c.writeWord(self.address, TWIST_LAST_ENCODER_EVENT, 0)
 
         return time_elapsed
 
@@ -343,7 +343,7 @@ class QwiicTwist(object):
         Returns the number of milliseconds since the last button event (press and release)
             By default, clear the current value
 
-        @param clearValue: Clear out the value? False by default
+        @param clearValue: Clear out the value? True by default
 
         @return **integer** time since last button press
         """
@@ -351,7 +351,7 @@ class QwiicTwist(object):
 
         # Clear the current value if requested
         if clear_value:
-            self._i2c.writeWord(TWIST_LAST_BUTTON_EVENT, 0)
+            self._i2c.writeWord(self.address, TWIST_LAST_BUTTON_EVENT, 0)
 
         return time_elapsed
 
